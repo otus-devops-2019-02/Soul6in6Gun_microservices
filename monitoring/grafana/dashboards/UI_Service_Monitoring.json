@@ -15,15 +15,16 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 4,
+  "iteration": 1551875176093,
   "links": [],
   "panels": [
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
         "h": 9,
@@ -43,7 +44,9 @@
       },
       "lines": true,
       "linewidth": 1,
+      "links": [],
       "nullPointMode": "null",
+      "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -54,7 +57,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "$$hashKey": "object:415",
           "expr": "histogram_quantile(0.95, sum(rate(ui_request_latency_seconds_bucket[5m])) by (le))",
           "format": "time_series",
           "intervalFactor": 1,
@@ -63,8 +65,9 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "Panel Title",
+      "title": "HTTP Response Time with 95% percentile",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -95,14 +98,18 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
         "h": 9,
@@ -124,6 +131,7 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -134,7 +142,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(ui_request_count{http_status=~\"^[45].*\"}[1m])",
+          "expr": "rate(ui_request_count{http_status=~\"^[45].*\",kubernetes_namespace=~\"$namespace\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -142,8 +150,9 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "ERRORS RATE",
+      "title": "Rate of UI HTTP Requests with Error",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -174,15 +183,19 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
-      "description": "ALL HTTP REQUESTS",
+      "datasource": "Prometheus",
+      "description": "All HTTP request that UI service receives",
       "fill": 1,
       "gridPos": {
         "h": 9,
@@ -204,6 +217,7 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -214,21 +228,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "$$hashKey": "object:358",
-          "expr": "rate(ui_request_count[1m])",
+          "expr": "rate(ui_request_count{kubernetes_namespace=~\"$namespace\"}[1m])",
           "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "1s",
           "intervalFactor": 1,
-          "legendFormat": "",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "UI HTTP Requests",
+      "title": "Rate of UI HTTP Request",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -259,18 +269,51 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
-  "refresh": false,
-  "schemaVersion": 16,
+  "refresh": "10s",
+  "schemaVersion": 18,
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "tags": [],
+          "text": "production",
+          "value": [
+            "production"
+          ]
+        },
+        "datasource": "Prometheus",
+        "definition": "label_values(namespace)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Env",
+        "multi": true,
+        "name": "namespace",
+        "options": [],
+        "query": "label_values(namespace)",
+        "refresh": 1,
+        "regex": "/.+/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -300,7 +343,6 @@
   },
   "timezone": "",
   "title": "UI_Service_Monitoring",
-  "uid": "MycbhGDZz",
-  "version": 5
+  "uid": "t3VBWXriz",
+  "version": 8
 }
-
