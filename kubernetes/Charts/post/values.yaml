@@ -1,0 +1,10 @@
+---
+service:
+  internalPort: 5000
+  externalPort: 5000
+
+image:
+  repository: soul6in6gun/ui
+  tag: latest
+
+databaseHost:
